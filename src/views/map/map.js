@@ -8,13 +8,11 @@ export default class CreateMap {
         this.viewer = null
         this.camera = null
         this.init()
-        // this.addTerrain()
-        this.handelCartesian()
     }
 
     flyTo() {
         this.viewer.camera.flyTo({
-            destination : Cesium.Cartesian3.fromDegrees(103.26,30.94, 2500)
+            destination : Cesium.Cartesian3.fromDegrees(103.58,30.85, 5000)
         });
     }
 
@@ -49,21 +47,7 @@ export default class CreateMap {
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
 
-    /**
-     * 加载地形
-     */
-    addTerrain() {
-        const terrainProvider = new Cesium.CesiumTerrainProvider({
-            url: Cesium.IonResource.fromAssetId(1), //这使用了Cesium Ion的默认全球地形
-            requestWaterMask: true, //请求水体效果所需要的海岸线数据
-            requestVertexNormals: true //请求地形照明数据
-          });
-          this.viewer.terrainProvider = terrainProvider;
-          //地形夸张
-        //   this.viewer.scene.globe.terrainExaggeration = 1.3;
-    }
-
-    init() {
+    async init() {
         window.CESIUM_BASE_URL = '/';
         try {
             this.viewer = new Cesium.Viewer(this.mapId, {
@@ -78,12 +62,14 @@ export default class CreateMap {
                 timeline:false,//时间轴
                 navigationHelpButton:false,//帮助按钮
                 navigationInstructionsInitiallyVisible: false,
-                terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(3956, {
-                requestVertexNormals: true
+                terrainProvider: await Cesium.CesiumTerrainProvider.fromUrl(
+                    Cesium.IonResource.fromAssetId(1), {
+                      requestVertexNormals: true
                 })
             });
             this.viewer._cesiumWidget._creditContainer.style.display = 'none'
             window.viewer = this.viewer
+            this.handelCartesian()
         } catch (error) {
             console.log(error);
         }
