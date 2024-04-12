@@ -24,7 +24,7 @@ export default class CreateMap {
             navigationHelpButton:false,//帮助按钮
             navigationInstructionsInitiallyVisible:false
         });
-        viewer._cesiumWidget._creditContainer.style.display = 'none'
+        this.viewer._cesiumWidget._creditContainer.style.display = 'none'
         window.viewer = this.viewer
     }
 }
